@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-
+    
     <!--Robot pose -->
-    <arg name="x" default="0.0"/>
-    <arg name="y" default="0.0"/>
-    <arg name="z" default="0.0"/>
+    <arg name="x" default="3"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
     <arg name="roll" default="0.0"/>
     <arg name="pitch" default="0.0"/>
-    <arg name="yaw" default="0.0"/>
+    <arg name="yaw" default="1.5707"/>
 
     <!-- Launch other relevant files-->
     <include file="$(find my_robot)/launch/robot_description.launch"/>
 
-
     <!-- World File -->
-    <arg name="world_file" default="$(find my_robot)/worlds/newer_world.world"/>
+    <arg name="world_file" default="$(find my_robot)/worlds/obagoren_ball.world"/>
 
     <!-- Launch Gazebo World -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -24,7 +23,6 @@
         <arg name="gui" value="true" />
         <arg name="world_name" value="$(arg world_file)"/>
     </include>
-
 
     <!-- Find my robot Description-->
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find my_robot)/urdf/my_robot.xacro'"/>
