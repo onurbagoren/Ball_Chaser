@@ -37,29 +37,13 @@ void process_image_callback(const sensor_msgs::Image img)
     int forward = img.width * 2 / 3;
     int lim = img.height * img.step;
 
-    for( int x_pos = 0; x_pos < lim; x_pos++ )
+    for( int i = 0; i < img.height; i++ )
     {
-        ROS_INFO_STREAM(img.step%x_pos);
-        ROS_INFO_STREAM(x_pos);
-        ROS_INFO_STREAM(img.step);
-        if( img.data[x_pos] == white_pixel )
+        for(int j = 0; j < img.step; j++)
         {
-            ROS_INFO_STREAM("Seeing the ball");
-            if( x_pos < left )
-            {
-                drive_robot( 0.0, 1.5708 );
-            }
-            else if( x_pos < forward )
-            {
-                drive_robot( 1.0, 0 );
-            }
-            else{
-                drive_robot(0.0, -1.5708);
-            }
-            break;
+            int position_on_image = i * img.step + j;
+            ROS_INFO_STREAM(img.data[position_on_image]);
         }
-        ROS_INFO_STREAM("Not seeing a white ball");
-        drive_robot(1.0, 0.0);
     }
 
 }
