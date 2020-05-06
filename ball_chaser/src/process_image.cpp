@@ -4,6 +4,7 @@
 
 // Define a global client that can request services
 ros::ServiceClient client;
+bool too_close = false;
 
 // This function calls the command_robot service to drive the robot in the specified direction
 void drive_robot(float lin_x, float ang_z)
@@ -49,7 +50,6 @@ void process_image_callback(const sensor_msgs::Image img)
     int right = img.width * 2 / 3;
     int rightest = img.width * 5 / 6;
 
-    int ball_position;
     bool ball_found = false;
 
     // TODO: implement so that the robot stops if within a certain distance of the ball
@@ -74,46 +74,43 @@ void process_image_callback(const sensor_msgs::Image img)
     }
 
     float average_value = vector_average(values);
-    std::cout << "average_value " << average_value << std::endl;
-    int total_white_pixels = values.size();
-
+    float total_white_pixels = float(values.size());
     float ratio = total_white_pixels / (img.height * img.width);
 
-    // for( int i = 0; i < img.height * img.step; i+=3 ) 
-    // {
-    //     if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel )
-    //     {
-    //         ball_position = i % img.width;
-    //         ball_found = true;
-    //         std::cout << "ball_position: " << ball_position << std::endl;
-    //         break;
-    //     }
-    // }
-    if (ball_found && ratio < 0.65)
+    if(ratio > 0.3)
     {
-        // if( average_value < leftest ){
-        //     drive_robot(0.0, 0.25);
-        // }
-        /*else */
-        if( average_value < left){
-            drive_robot(0.0, 0.25);
-        }
-        // else if (average_value > rightest){
-        //     drive_robot(0.0, -0.25);
-        // }
-        else if (average_value > right )
-        {
-            drive_robot(0.0, -0.25);
-        }else{
-            drive_robot(0.5, 0.0);
-        }
-    }else if(ratio > 0.65){
-        drive_robot(0.0, 0.0);
+        too_close = true;
     }else{
-        // Search for ball by rotating in place
-        drive_robot(0.0, 0.5);
+        too_close = false;
     }
 
+    if(!too_close)
+    {
+        if (ball_found)
+        {
+            // if( average_value < leftest ){
+            //     drive_robot(0.0, 0.25);
+            // }
+            /*else */if( average_value < left){
+                drive_robot(0.075, 0.125);
+            }
+            // else if (average_value > rightest){
+            //     drive_robot(0.0, -0.25);
+            // }
+            else if (average_value > right )
+            {
+                drive_robot(0.075, -0.125);
+            }else{
+                drive_robot(0.25, 0.0);
+            }
+        }else{
+            // Search for ball by rotating in place
+            drive_robot(0.0, 0.5);
+        }
+    }else{
+        ROS_INFO_STREAM("Robot is very close to the ball. Robot stopped.");
+        drive_robot(0.0, 0.0);
+    }
 }
 
 int main(int argc, char** argv)
