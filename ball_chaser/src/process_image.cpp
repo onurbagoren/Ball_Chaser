@@ -65,7 +65,7 @@ void process_image_callback(const sensor_msgs::Image img)
     for( int i = 0; i < img.height * img.step; i++)
     {
             if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel ){
-                int position = i % img.width;
+                int position = (i % img.step)/3;
                 ball_found = true;
                 values.push_back(position%img.width);
             }
@@ -91,14 +91,14 @@ void process_image_callback(const sensor_msgs::Image img)
                 drive_robot(0.0, 0.5);
             }
             else if( average_value < left){
-                drive_robot(0.0, 0.5);
+                drive_robot(0.075, 0.25);
             }
             else if (average_value > rightest){
                 drive_robot(0.0, -0.5);
             }
             else if (average_value > right )
             {
-                drive_robot(0.0, -0.5);
+                drive_robot(0.075, -0.25);
             }else{
                 drive_robot(0.5, 0.0);
             }
