@@ -88,20 +88,20 @@ void process_image_callback(const sensor_msgs::Image img)
     {
         if (ball_found)
         {
-            // if( average_value < leftest ){
-            //     drive_robot(0.0, 0.25);
-            // }
-            /*else */if( average_value < left){
-                drive_robot(0.075, 0.125);
+            if( average_value < leftest ){
+                drive_robot(0.0, 0.5);
             }
-            // else if (average_value > rightest){
-            //     drive_robot(0.0, -0.25);
-            // }
+            else if( average_value < left){
+                drive_robot(0.075, 0.25);
+            }
+            else if (average_value > rightest){
+                drive_robot(0.0, -0.5);
+            }
             else if (average_value > right )
             {
-                drive_robot(0.075, -0.125);
+                drive_robot(0.075, -0.25);
             }else{
-                drive_robot(0.25, 0.0);
+                drive_robot(0.5, 0.0);
             }
         }else{
             // Search for ball by rotating in place
