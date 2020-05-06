@@ -3,8 +3,7 @@
 
 #### Clone repo into catkin workspace
 ```
-$ git clone git@github.com:onurbagoren/Ball_Chaser .
-$ mv Ball_Chaser/* ~/catkin_ws/src
+$ git clone git@github.com:onurbagoren/Ball_Chaser ~catkin_ws/src
 $ cd ~/catkin_ws/
 $ catkin_make
 ```
