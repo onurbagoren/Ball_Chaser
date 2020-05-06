@@ -1959,10 +1959,10 @@
       <pose frame=''>-1.52099 5.74823 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>172 963000000</sim_time>
-      <real_time>28 224022397</real_time>
-      <wall_time>1588739998 618930961</wall_time>
-      <iterations>28122</iterations>
+      <sim_time>213 313000000</sim_time>
+      <real_time>40 456389793</real_time>
+      <wall_time>1588746582 707671315</wall_time>
+      <iterations>40350</iterations>
       <model name='Stop Sign'>
         <pose frame=''>-1.52099 5.74823 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -1984,13 +1984,13 @@
         </link>
       </model>
       <model name='first_2015_trash_can'>
-        <pose frame=''>-5.32558 2.2318 -3e-06 1e-06 1.2e-05 -0.000341</pose>
+        <pose frame=''>-5.32554 2.23179 -2e-06 -8e-06 9e-06 -0.000471</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>-5.32558 2.2318 -3e-06 1e-06 1.2e-05 -0.000341</pose>
+          <pose frame=''>-5.32554 2.23179 -2e-06 -8e-06 9e-06 -0.000471</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>4.31134 -0.746076 1.44746 1.93554 -0.91098 0.178092</acceleration>
-          <wrench>20.827 -3.60411 6.99233 0 -0 0</wrench>
+          <acceleration>6.23279 -0.809708 5.03937 -0.176852 -1.10447 2.41057</acceleration>
+          <wrench>30.1091 -3.91151 24.344 0 -0 0</wrench>
         </link>
       </model>
       <model name='ground_plane'>
@@ -2004,10 +2004,10 @@
         </link>
       </model>
       <model name='my_ball'>
-        <pose frame=''>3.62297 2.49505 0.1 0 -0 0</pose>
+        <pose frame=''>3.5 2 0.1 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>3.62297 2.49505 0.1 0 -0 0</pose>
+          <pose frame=''>3.5 2 0.1 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -2155,7 +2155,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>17.1926 3.33384 12.6279 0 0.631643 3.0762</pose>
+        <pose frame=''>5.7941 2.60953 1.75445 -0 0.650483 -3.08892</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

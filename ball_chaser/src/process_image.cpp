@@ -15,6 +15,8 @@ void drive_robot(float lin_x, float ang_z)
     srv.request.linear_x = lin_x;
     srv.request.angular_z = ang_z;
 
+    std::cout << "lin_x: " << lin_x << ", ang_z: " << ang_z << std::endl;
+
     if (!client.call(srv))
     {
         ROS_ERROR("Failed to call service process_image"); //sus
@@ -45,9 +47,9 @@ void process_image_callback(const sensor_msgs::Image img)
 
 
     int leftest = img.width / 6;
-    int left = img.width / 3;
+    int left = img.width * 5/ 12;
 
-    int right = img.width * 2 / 3;
+    int right = img.width * 7 / 12;
     int rightest = img.width * 5 / 6;
 
     bool ball_found = false;
@@ -61,7 +63,7 @@ void process_image_callback(const sensor_msgs::Image img)
     for( int i = 0; i < img.height; i ++)
     {
         // At every point i, which represents the height of the image, go through (r, g, b) of the rows, incrementing by three
-        for ( int j = 0; j < img.step; j+=3)
+        for ( int j = 0; j < img.step; j++)
         {
             int position = i * img.step + j;
             if( img.data[position] == white_pixel && img.data[position+1] == white_pixel && img.data[position+2] == white_pixel ){
@@ -76,6 +78,7 @@ void process_image_callback(const sensor_msgs::Image img)
     float average_value = vector_average(values);
     float total_white_pixels = float(values.size());
     float ratio = total_white_pixels / (img.height * img.width);
+    std::cout << "average value: " << average_value /*<< ", ratio: " << ratio*/ << std::endl;
 
     if(ratio > 0.3)
     {
@@ -92,20 +95,20 @@ void process_image_callback(const sensor_msgs::Image img)
                 drive_robot(0.0, 0.5);
             }
             else if( average_value < left){
-                drive_robot(0.075, 0.25);
+                drive_robot(0.0, 0.25);
             }
             else if (average_value > rightest){
                 drive_robot(0.0, -0.5);
             }
             else if (average_value > right )
             {
-                drive_robot(0.075, -0.25);
+                drive_robot(0.0, -0.25);
             }else{
                 drive_robot(0.5, 0.0);
             }
         }else{
             // Search for ball by rotating in place
-            drive_robot(0.0, 0.5);
+            drive_robot(0.0, 1.0);
         }
     }else{
         ROS_INFO_STREAM("Robot is very close to the ball. Robot stopped.");

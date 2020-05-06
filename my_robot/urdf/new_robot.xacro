@@ -1,14 +1,30 @@
 <?xml version='1.0'?>
 
+<!--Drive robot straight, might be swaying one direction a little bit more-->
+
 <robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo"/>
+
+  <gazebo reference="chassis">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="left_wheel">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo> 
+  <gazebo reference="right_wheel">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+  <gazebo reference="camera">
+    <material>Gazebo/Indigo</material>
+  </gazebo>
+
   <link name="robot_footprint"></link>
 
   <joint name="robot_footprint_joint" type="fixed">
-  <origin xyz="0 0 0" rpy="0 0 0" />
-  <parent link="robot_footprint"/>
-  <child link="chassis" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="robot_footprint"/>
+    <child link="chassis" />
   </joint>
 
   <link name='chassis'>
@@ -49,6 +65,23 @@
 
       <visual name="front_caster_visual">
         <origin xyz="0.25 0 0" rpy="0 0 0"/>
+        <geometry>
+            <sphere radius="0.075"/>
+        </geometry>
+        <material name="grey">
+          <color rgba="0.5 0.6 0.7 1"/>
+        </material>
+      </visual>
+
+      <collision name="back_caster_collision">
+        <origin xyz="-0.25 0 0" rpy="0 0 0"/>
+        <geometry>
+            <sphere radius="0.075"/>
+        </geometry>
+      </collision>
+
+      <visual name="back_caster_visual">
+        <origin xyz="-0.25 0 0" rpy="0 0 0"/>
         <geometry>
             <sphere radius="0.075"/>
         </geometry>

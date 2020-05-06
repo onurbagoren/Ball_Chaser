@@ -11,7 +11,7 @@ ros::Publisher motor_command_publisher;
 bool handle_drive_request( ball_chaser::DriveToTarget::Request& req, ball_chaser::DriveToTarget::Response& res )
 {
 
-    ROS_INFO("DriveToTarget message received with the x: %1.2f, yaw: %1.2f", float(req.linear_x), float(req.angular_z));
+    // ROS_INFO("DriveToTarget message received with the x: %1.2f, yaw: %1.2f", float(req.linear_x), float(req.angular_z));
 
     geometry_msgs::Twist p;
 
@@ -20,8 +20,8 @@ bool handle_drive_request( ball_chaser::DriveToTarget::Request& req, ball_chaser
 
     motor_command_publisher.publish( p );
 
-    res.msg_feedback = ("motor_command_publisher published values of linear_x: %1.2f, angular_z: %1.2f", float(p.linear.x), float(p.angular.z));
-    ROS_INFO_STREAM( res.msg_feedback );
+    // res.msg_feedback = ("motor_command_publisher published values of linear_x: %1.2f, angular_z: %1.2f", float(p.linear.x), float(p.angular.z));
+    // ROS_INFO_STREAM( res.msg_feedback );
 
     return true;
 } 
