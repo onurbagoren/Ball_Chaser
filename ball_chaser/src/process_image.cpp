@@ -49,9 +49,9 @@ void process_image_callback(const sensor_msgs::Image img)
 
 
     int leftest = img.width / 6;
-    int left = img.width * 5 / 12;
+    int left = img.width /3;
 
-    int right = img.width * 7 / 12;
+    int right = img.width * 2/3;
     int rightest = img.width * 5 / 6;
 
     bool ball_found = false;
@@ -62,7 +62,7 @@ void process_image_callback(const sensor_msgs::Image img)
 
     std::vector<int> values;
     int location;
-    for( int i = 0; i < img.height * img.step; i ++)
+    for( int i = 0; i < img.height * img.step; i++)
     {
             if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel ){
                 int position = i % img.width;
@@ -76,7 +76,7 @@ void process_image_callback(const sensor_msgs::Image img)
     float total_white_pixels = float(values.size());
     float ratio = total_white_pixels / (img.height * img.width);
 
-    if(ratio > 0.35)
+    if(ratio > 0.3)
     {
         too_close = true;
     }else{
@@ -91,14 +91,14 @@ void process_image_callback(const sensor_msgs::Image img)
                 drive_robot(0.0, 0.5);
             }
             else if( average_value < left){
-                drive_robot(0.0, 0.25);
+                drive_robot(0.0, 0.5);
             }
             else if (average_value > rightest){
                 drive_robot(0.0, -0.5);
             }
             else if (average_value > right )
             {
-                drive_robot(0.0, -0.25);
+                drive_robot(0.0, -0.5);
             }else{
                 drive_robot(0.5, 0.0);
             }
