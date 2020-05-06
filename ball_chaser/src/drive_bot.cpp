@@ -20,9 +20,6 @@ bool handle_drive_request( ball_chaser::DriveToTarget::Request& req, ball_chaser
 
     motor_command_publisher.publish( p );
 
-
-    ros::Duration(3).sleep();
-
     res.msg_feedback = ("motor_command_publisher published values of linear_x: %1.2f, angular_z: %1.2f", float(p.linear.x), float(p.angular.z));
     ROS_INFO_STREAM( res.msg_feedback );
 
