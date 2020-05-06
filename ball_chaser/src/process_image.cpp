@@ -9,18 +9,26 @@ ros::ServiceClient client;
 void drive_robot(float lin_x, float ang_z)
 {
     // TODO: Request a service and pass the velocities to it to drive the robot
-    ROS_INFO_STREAM("Moving robot");
 
     ball_chaser::DriveToTarget srv;
     srv.request.linear_x = lin_x;
     srv.request.angular_z = ang_z;
 
-    std::cout << srv.request << std::endl;
-
-    if (client.call(srv))
+    if (!client.call(srv))
     {
         ROS_ERROR("Failed to call service process_image"); //sus
     }
+}
+
+float vector_average( std::vector<int> v )
+{
+    int size_of = v.size();
+    float total = 0.0;
+    for( int i = 0; i < size_of; i++)
+    {
+        total += v.at(i);
+    }
+    return total / size_of;
 }
 
 // This callback function continuously executes and reads the image data
@@ -35,37 +43,75 @@ void process_image_callback(const sensor_msgs::Image img)
     // Request a stop when there's no white ball seen by the camera
 
 
+    int leftest = img.width / 6;
     int left = img.width / 3;
-    int forward = img.width * 2 / 3;
 
-    std::cout << "image w: " << img.width << std::endl;
+    int right = img.width * 2 / 3;
+    int rightest = img.width * 5 / 6;
+
     int ball_position;
     bool ball_found = false;
 
-    //
-    for( int i = 0; i < img.height * img.step; i+=3 ) 
+    // TODO: implement so that the robot stops if within a certain distance of the ball
+    // Get area of the ball/frame size. if >65%, stop robot.
+    // Find ball position by not the first pixel, but the middle point of the ball
+
+    std::vector<int> values;
+
+    for( int i = 0; i < img.height; i ++)
     {
-        if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel )
+        // At every point i, which represents the height of the image, go through (r, g, b) of the rows, incrementing by three
+        for ( int j = 0; j < img.step; j+=3)
         {
-            ball_position = i % img.width;
-            ball_found = true;
-            std::cout << ball_position << std::endl;
-            break;
+            int position = i * img.step + j;
+            if( img.data[position] == white_pixel && img.data[position+1] == white_pixel && img.data[position+2] == white_pixel ){
+                ball_found = true;
+                values.push_back(position%img.width);
+            }
+
         }
+
     }
-    if (ball_found)
+
+    float average_value = vector_average(values);
+    std::cout << "average_value " << average_value << std::endl;
+    int total_white_pixels = values.size();
+
+    float ratio = total_white_pixels / (img.height * img.width);
+
+    // for( int i = 0; i < img.height * img.step; i+=3 ) 
+    // {
+    //     if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel )
+    //     {
+    //         ball_position = i % img.width;
+    //         ball_found = true;
+    //         std::cout << "ball_position: " << ball_position << std::endl;
+    //         break;
+    //     }
+    // }
+    if (ball_found && ratio < 0.65)
     {
-        if( ball_position < left ){
-            drive_robot(0.0, 1.0);
+        // if( average_value < leftest ){
+        //     drive_robot(0.0, 0.25);
+        // }
+        /*else */
+        if( average_value < left){
+            drive_robot(0.0, 0.25);
         }
-        else if( ball_position < forward){
-            drive_robot(1.0, 0.0);
+        // else if (average_value > rightest){
+        //     drive_robot(0.0, -0.25);
+        // }
+        else if (average_value > right )
+        {
+            drive_robot(0.0, -0.25);
+        }else{
+            drive_robot(0.5, 0.0);
         }
-        else{
-            drive_robot(0.0, -1.0);
-        }
-    }else{
+    }else if(ratio > 0.65){
         drive_robot(0.0, 0.0);
+    }else{
+        // Search for ball by rotating in place
+        drive_robot(0.0, 0.5);
     }
 
 }
