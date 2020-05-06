@@ -2,10 +2,12 @@
 ## Ball Chaser by Onur Bagoren
 
 #### Clone repo into catkin workspace
-- `$ git clone git@github.com:onurbagoren/Ball_Chaser .`
-- `$ mv Ball_Chaser/* ~/catkin_ws/src`
-- `$ cd ~/catkin_ws/`
-- `$ catkin_make`
+```
+$ git clone git@github.com:onurbagoren/Ball_Chaser .
+$ mv Ball_Chaser/* ~/catkin_ws/src
+$ cd ~/catkin_ws/
+$ catkin_make
+```
 
 #### How to run:
 - On one terminal run `source devel/setup.bash` and then `roslaunch my_robot world.launch`
