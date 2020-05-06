@@ -40,6 +40,8 @@ void process_image_callback(const sensor_msgs::Image img)
 
     int white_pixel = 255;
 
+    // TODO: To check for any color besides white, check for consistent colors that occur multiple times in a row?
+
     // TODO: Loop through each pixel in the image and check if there's a bright white one
     // Then, identify if this pixel falls in the left, mid, or right side of the image
     // Depending on the white ball position, call the drive_bot function and pass velocities to it
@@ -47,7 +49,7 @@ void process_image_callback(const sensor_msgs::Image img)
 
 
     int leftest = img.width / 6;
-    int left = img.width * 5/ 12;
+    int left = img.width * 5 / 12;
 
     int right = img.width * 7 / 12;
     int rightest = img.width * 5 / 6;
@@ -59,28 +61,22 @@ void process_image_callback(const sensor_msgs::Image img)
     // Find ball position by not the first pixel, but the middle point of the ball
 
     std::vector<int> values;
-
-    for( int i = 0; i < img.height; i ++)
+    int location;
+    for( int i = 0; i < img.height * img.step; i ++)
     {
-        // At every point i, which represents the height of the image, go through (r, g, b) of the rows, incrementing by three
-        for ( int j = 0; j < img.step; j++)
-        {
-            int position = i * img.step + j;
-            if( img.data[position] == white_pixel && img.data[position+1] == white_pixel && img.data[position+2] == white_pixel ){
+            if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel ){
+                int position = i % img.width;
                 ball_found = true;
                 values.push_back(position%img.width);
             }
-
-        }
 
     }
 
     float average_value = vector_average(values);
     float total_white_pixels = float(values.size());
     float ratio = total_white_pixels / (img.height * img.width);
-    std::cout << "average value: " << average_value /*<< ", ratio: " << ratio*/ << std::endl;
 
-    if(ratio > 0.3)
+    if(ratio > 0.35)
     {
         too_close = true;
     }else{
@@ -108,7 +104,8 @@ void process_image_callback(const sensor_msgs::Image img)
             }
         }else{
             // Search for ball by rotating in place
-            drive_robot(0.0, 1.0);
+            drive_robot(0.0, 1.0); // 1 rad/s
+            // TODO: if after a full 360 rotation, the ball doen't appear, drive forward for 3 seconds.
         }
     }else{
         ROS_INFO_STREAM("Robot is very close to the ball. Robot stopped.");
